@@ -1,0 +1,196 @@
+{% extends 'employees/base.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Meeting</title>
+    <meta charset="utf-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.css" rel="stylesheet"
+        type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
+</head>
+
+<body>
+
+    <h2>All Employees</h2>
+
+    {% if messages %}
+    {% for message in messages %}
+    <script type="text/javascript">
+    swal("Meeting scheduled successfully!", "Okay!", "success");
+    </script>
+    {% endfor %}
+    {% endif %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">E Code</th>
+                <th scope="col">First</th>
+                <th scope="col">Middle</th>
+                <th scope="col">Last</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Created on</th>
+                <th scope="col">Modified on</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp in context %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{emp.employeecode}}</td>
+                <td>{{emp.firstname}}</td>
+                <td>{{emp.middlename}}</td>
+                <td>{{emp.lastname}}</td>
+                <td>{{emp.designation.name}}</td>
+                <td>{{emp.department.name}}</td>
+                <td>{{emp.createdon}}</td>
+                <td>{{emp.modifiedon}}</td>
+                <td>
+                    <button type="submit" class="btn btn-primary" id="book_slot" onclick="myfunction2.call(this)"
+                        data-employeeid="{{emp.employeeid}}" data-employeecode="{{emp.employeecode}}"
+                        data-firstname="{{emp.firstname}}" data-middlename="{{emp.middlename}}"
+                        data-lastname="{{emp.lastname}}" data-employeecode="{{emp.employeecode}}"
+                        data-designation="{{emp.designation.name}}" data-department="{{emp.department.name}}"
+                        data-createdon="{{emp.createdon}}" data-modifiedon="{{emp.modifiedon}}" data-target="#myModal"
+                        data-toggle="modal">Book a meeting
+                    </button>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <br>
+                <form method="POST" action="{% url 'bookslot' %}" id="book-meeting">
+                    {% csrf_token %}
+                    <input type="text" hidden name="emp_id_1" , id="emp_id_1">
+                    <div class="form-group col-sm-6 my-4" id="select_id">
+                        <label for="emp_select">Select Emloyee</label>
+                        <select class="form-control" placeholder="Select" name="emp_id_2" id="emp_select" onchange="myfunction3.call(this)">
+                            <option disabled selected value> -- select an option -- </option>
+                            {% for emp in context %}
+                            <option value={{emp.employeeid}}> {{emp.employeecode}}
+                                {{emp.firstname}}
+                                {{emp.lastname}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6 my-5" id="select_id">
+                        <label for="slot_select">Select Slot</label>
+                        <select class="form-control" name="slot_select" id="slot_select">
+                            <option selected="Choose slot" value=""> No Slots Available </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6 my-5" id="message_text">
+                        <label for="book-message">Message</label>
+                        <textarea class="form-control" placeholder="message" id="book-message" , name="message">
+                            </textarea>
+                    </div>
+
+                    <br><br> <br>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-primary" value="Submit">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="card card hover" id="mycard" style="width: 20rem; margin-left: auto;margin-right: 0;">
+    <div class="card-header">
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for slot in employee_slots %}
+        <a href="{% url 'tasks' %}" style="text-decoration: underline; text-decoration: none;">
+            <li class="list-group-item">{{slot.employee1}}</li>
+        </a>
+        <li class="list-group-item">{{slot.employee2}}</li>
+        <li class="list-group-item">{{slot.meetingdate}}</li>
+        <li class="list-group-item">{{slot.meetingfromtime}}</li>
+        <li class="list-group-item">{{slot.meetingtotime}}</li>
+        {% endfor %}
+    </ul>
+</div>
+<script type="text/javascript">
+
+    function myfunction2() {
+        id = this.dataset.employeeid
+        $("#book-meeting input[name='emp_id_1'").val(id)
+        let id2
+        $("#emp_select option").each(function () {
+            $(this).show();
+            if (this.value == id) {
+                $(this).hide();
+            } else if (id2 == undefined) {
+                id2 = this.value
+            }
+        });
+    }
+
+    function myfunction3() {
+        id2 = $("#emp_select")[0].value
+        $.ajax(
+            {
+                type: "POST",
+                url: "{% url 'tasks' %}",
+                data: {
+                    "id": id,
+                    "id2": id2,
+                },
+                success: function (data) {
+                    debugger
+                    slot_text = ''
+                    data.data.forEach((element) => {
+                        slot_text = slot_text + '<option>' + element + '</option>'
+                    });
+                    $("#slot_select").html(slot_text)
+                    $('#message').text(data);
+                }
+            })
+    }
+
+</script>
+
+{% endblock %}
