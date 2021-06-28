@@ -30,7 +30,7 @@ class Employee(models.Model):
     firstname= models.CharField(max_length=100, blank=False, null=False, db_column='FirstName')
     middlename=models.CharField(max_length=100, blank=False, null=False, db_column='MiddleName')
     lastname=models.CharField(max_length=100, blank=False, null=False, db_column='LastName')
-    employeecode=models.CharField(max_length=30, blank=False, null=False, db_column='EmployeeCode')
+    employeecode=models.CharField(max_length=30, blank=False, null=False, db_column='EmployeeCode', unique=True)
     designation=models.ForeignKey(Designation, on_delete=models.DO_NOTHING, blank=False, null=False, db_column='DesignationId')
     department= models.ForeignKey(Department,on_delete=models.DO_NOTHING, blank=False, null=False, db_column='DepartmentId')
     createdon= models.DateTimeField(auto_now_add=True, db_column='CreatedOn')
@@ -53,3 +53,6 @@ class EmployeeSlots(models.Model):
         
     def __str__(self):
         return str(self.employeeslotid)+' '+str(self.meetingdate)
+    
+    class Meta:
+        unique_together = ('employee1', 'employee2','meetingdate', "meetingfromtime", "meetingtotime")
