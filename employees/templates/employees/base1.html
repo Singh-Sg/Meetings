@@ -1,0 +1,32 @@
+{%  extends 'employees/base.html' %}
+{% block content %}
+
+
+<div>
+
+    <select id="emp_list">
+
+
+    </select>
+</div>
+<script>
+        $( document ).ready( function() {
+            console.log("fdfd")
+           $.ajax({
+                url: "{% url 'index_api' %}",
+                // dataType: 'json',
+                type: 'GET',
+                error: function(data){
+                    console.log("kdfhdjk")
+                },
+                complete: function(data){
+                    slot_text =''
+                 data.responseJSON.forEach((element) => {
+                            slot_text = slot_text + '<option>' + element.firstname + ' '+ element.lastname+ '</option>'
+                        });
+                        $("#emp_list").html(slot_text);
+                },
+            });
+        });
+</script>
+{% endblock %}
