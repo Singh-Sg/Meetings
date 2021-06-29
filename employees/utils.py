@@ -4,6 +4,10 @@ from datetime import datetime, date, time
 
 
 def get_slots(employee_code, meeting_date):
+
+    """
+    Finding slots
+    """
     data = EmployeeSlots.objects.filter(
         Q(
             Q(employee1__employeecode=employee_code)
@@ -23,6 +27,9 @@ def get_slots(employee_code, meeting_date):
 
 
 def is_slot_available(id, id2, meeting_date):
+    """
+    Fining available slot
+    """
     emp1_slot = get_slots(id, meeting_date)
     emp2_slot = get_slots(id2, meeting_date)
     available_slots = []

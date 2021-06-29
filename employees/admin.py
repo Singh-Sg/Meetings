@@ -6,6 +6,9 @@ from .models import *
 
 
 class EmployeeSlotsAdmin(admin.ModelAdmin):
+    """
+    EmployeeSlots Admin view
+    """
     model = EmployeeSlots
     list_display = (
         "employee1",

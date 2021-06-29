@@ -6,6 +6,10 @@ from employees.utils import is_slot_available
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    """
+    Employees Serializer
+    """
+
     department_name = serializers.CharField(source='department.name', read_only=True)
     designation_name = serializers.CharField(source='designation.name', read_only=True)
 
@@ -15,6 +19,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSlotsSerializer(serializers.Serializer):
+    """
+    EmployeeSlots Serializer
+
+    """
 
     emp_id_1 = serializers.CharField()
     emp_id_2 = serializers.CharField()
