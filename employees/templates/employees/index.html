@@ -1,9 +1,7 @@
 {% extends 'employees/base.html' %}
 {% block content %}
-
 <div class="container">
     <h4>EMPLOYEES</h4>
-
     <table class="table table-hover">
         <thead>
             <tr>
@@ -17,16 +15,11 @@
             </tr>
         </thead>
         <tbody id="emp_body_list">
-
-
         </tbody>
-
     </table>
-
     <!-- Modal -->
     <div class="modal fade" id="book-meeting-modal" role="dialog">
         <div class="modal-dialog">
-
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -44,7 +37,6 @@
                                 <input class="form-control" type="text" hidden name="selected-employee" readonly
                                     id="selected-employee">
                                 </input>
-
                             </div>
                             <div class="form-group col-sm-6 my-4" id="select_id">
                                 <label for="emp_select">Select Emloyee</label>
@@ -65,7 +57,8 @@
                             </div>
                             <div class="form-group col-sm-12 my-5" id="message_text">
                                 <label for="book-message">Message</label>
-                                <textarea class="form-control" placeholder="message" id="book-message" , name="message">
+                                <textarea class="form-control" placeholder="message" id="book-message" ,
+                                    style="text-align:left;" name="message">
                             </textarea>
                             </div>
                             <br><br> <br>
@@ -81,32 +74,31 @@
     </div>
 </div>
 <script>
-$("#book-meeting").submit(function (event) {
-    event.preventDefault();
-    $("#slot_select").prop('required', true);
-    if ($("#book-meeting")[0].checkValidity()) {
-        $.ajax(
-            {
-                type: "POST",
-                url: "{%url 'bookslot' %}",
-                method: "POST",
-                data: $(this).serialize(),
-                success: function (data) {
-                    console.log("not working")
-                    swal("Created", data.message, "success");
-                    $("#book-meeting-modal .close").click();
-                    $("#book-meeting-modal .close").trigger("click");
-                },
-                error: function (data) {
-                    alert(data)
-                },
-            }
-        )
-    }
-    else {
-        $("#book-meeting")[0].reportValidity()
-
-    }
-});
+    $("#book-meeting").submit(function (event) {
+        event.preventDefault();
+        $("#slot_select").prop('required', true);
+        if ($("#book-meeting")[0].checkValidity()) {
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "{%url 'bookslot' %}",
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        console.log("not working")
+                        swal("Created", data.message, "success");
+                        $("#book-meeting-modal .close").click();
+                        $("#book-meeting-modal .close").trigger("click");
+                    },
+                    error: function (data) {
+                        alert(data)
+                    },
+                }
+            )
+        }
+        else {
+            $("#book-meeting")[0].reportValidity()
+        }
+    });
 </script>
 {% endblock %}
